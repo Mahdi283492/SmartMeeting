@@ -1,12 +1,14 @@
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 namespace SmartMeetingAPI.Models
 {
-    public class AppDbContext : DbContext
+  public class AppDbContext 
+        : IdentityDbContext<ApplicationUser, IdentityRole<int>, int>
     {
         public AppDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<User> Users { get; set; }
+      
         public DbSet<Room> Rooms { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Meeting> Meetings { get; set; }
@@ -16,6 +18,7 @@ namespace SmartMeetingAPI.Models
         public DbSet<Notification> Notifications { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Attendee>()
                 .HasKey(a => new { a.MeetingID, a.UserID });
 

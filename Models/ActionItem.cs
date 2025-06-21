@@ -16,6 +16,6 @@ namespace SmartMeetingAPI.Models
         public Minutes Minutes { get; set; } = null!;
 
         [JsonIgnore]
-        public User User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
     }
 }

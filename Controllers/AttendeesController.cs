@@ -39,7 +39,7 @@ namespace SmartMeetingAPI.Controllers
 
             if (!await _context.Meetings.AnyAsync(m => m.ID == input.MeetingID))
                 return BadRequest($"No Meeting with ID {input.MeetingID}.");
-            if (!await _context.Users.AnyAsync(u => u.ID == input.UserID))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
                 return BadRequest($"No User with ID {input.UserID}.");
 
             var attendee = new Attendee

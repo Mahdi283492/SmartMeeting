@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/*using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMeetingAPI.DTOs;
 using SmartMeetingAPI.Models;
@@ -18,7 +18,7 @@ namespace SmartMeetingAPI.Controllers
 
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
@@ -33,8 +33,8 @@ namespace SmartMeetingAPI.Controllers
 
                return user;
            }*/
-        [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUserById(int id)
+     /*   [HttpGet("{id}")]
+        public async Task<ActionResult<ApplicationUser>> GetUserById(int id)
         {
             var user = await _context.Users.FindAsync(id);
 
@@ -55,23 +55,23 @@ namespace SmartMeetingAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new User
+            var user = new ApplicationUser
             {
                 Name = input.Name,
                 Email = input.Email,
                 PasswordHash = input.PasswordHash,
-                Role = input.Role
+                
             };
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
 
-            return CreatedAtAction(nameof(GetUserById), new { id = user.ID }, user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] User input)
+        public async Task<IActionResult> UpdateUser(int id, [FromBody] ApplicationUser input)
         {
             var user = await _context.Users.FindAsync(id);
             if (user == null)
@@ -80,7 +80,7 @@ namespace SmartMeetingAPI.Controllers
             user.Name = input.Name;
             user.Email = input.Email;
             user.PasswordHash = input.PasswordHash;
-            user.Role = input.Role;
+          
 
             await _context.SaveChangesAsync();
             return NoContent();
@@ -103,3 +103,4 @@ namespace SmartMeetingAPI.Controllers
 
     }
 }
+*/

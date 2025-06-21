@@ -37,7 +37,7 @@ namespace SmartMeetingAPI.Controllers
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if (!await _context.Users.AnyAsync(u => u.ID == input.UserID))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
                 return BadRequest($"No User with ID {input.UserID}.");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
@@ -64,7 +64,7 @@ namespace SmartMeetingAPI.Controllers
             var booking = await _context.Bookings.FindAsync(id);
             if (booking is null)
                 return NotFound();
-            if (!await _context.Users.AnyAsync(u => u.ID == input.UserID))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
                 return BadRequest($"No User with ID {input.UserID}.");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))

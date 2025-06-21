@@ -1,4 +1,3 @@
-// Controllers/ActionItemsController.cs
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMeetingAPI.Models;
@@ -39,7 +38,7 @@ namespace SmartMeetingAPI.Controllers
 
             if (!await _context.Minutes.AnyAsync(m => m.ID == input.MinutesID))
                 return BadRequest($"No Minutes with ID {input.MinutesID}.");
-            if (!await _context.Users.AnyAsync(u => u.ID == input.AssignedTo))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.AssignedTo))
                 return BadRequest($"No User with ID {input.AssignedTo}.");
 
             var actionItem = new ActionItem
@@ -67,7 +66,7 @@ namespace SmartMeetingAPI.Controllers
 
             if (!await _context.Minutes.AnyAsync(m => m.ID == input.MinutesID))
                 return BadRequest($"No Minutes with ID {input.MinutesID}.");
-            if (!await _context.Users.AnyAsync(u => u.ID == input.AssignedTo))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.AssignedTo))
                 return BadRequest($"No User with ID {input.AssignedTo}.");
 
             actionItem.MinutesID  = input.MinutesID;

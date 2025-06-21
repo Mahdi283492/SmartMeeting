@@ -12,7 +12,7 @@ namespace SmartMeetingAPI.Models
         public required string Status { get; set; }
 
         [JsonIgnore]
-        public User User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         [JsonIgnore]
         public Room Room { get; set; } = null!;

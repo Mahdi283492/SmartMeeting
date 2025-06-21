@@ -12,6 +12,6 @@ namespace SmartMeetingAPI.Models
         public Meeting Meeting { get; set; } = null!;
 
         [JsonIgnore]
-        public User User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
     }
 }

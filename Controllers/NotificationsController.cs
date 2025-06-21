@@ -36,7 +36,7 @@ namespace SmartMeetingAPI.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            if (!await _context.Users.AnyAsync(u => u.ID == input.UserID))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
                 return BadRequest($"No User with ID {input.UserID}.");
 
             var notification = new Notification
@@ -61,7 +61,7 @@ namespace SmartMeetingAPI.Controllers
             if (notification is null)
                 return NotFound();
 
-            if (!await _context.Users.AnyAsync(u => u.ID == input.UserID))
+            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
                 return BadRequest($"No User with ID {input.UserID}.");
 
             notification.UserID = input.UserID;
