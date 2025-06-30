@@ -1,0 +1,131 @@
+:host {
+  display: block;
+  padding: 2rem;
+  font-family: 'Segoe UI', sans-serif;
+  color: #2c3e50;
+}
+.form-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+
+  button {
+    padding: 0.6rem 1.4rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    appearance: none; /* Prevent browser default styling */
+  }
+
+  .btn-book {
+    background-color: #3498db !important;
+    color: white;
+
+    &:hover {
+      background-color: #2980b9 !important;
+      transform: translateY(-1px);
+    }
+  }
+
+  .btn-cancel {
+    background-color: #f0f0f0;
+    color: #333;
+
+    &:hover {
+      background-color: #dcdcdc;
+      transform: translateY(-1px);
+    }
+  }
+}
+
+
+form {
+  background-color: #fdfdfd;
+  padding: 1.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+
+  input, select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+
+  label {
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+    display: block;
+    font-size: 0.875rem;
+  }
+
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .form-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+
+    button {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-book {
+      background-color: #27ae60;
+      color: white;
+    }
+
+    .btn-book:hover {
+      background-color: #1e874e;
+    }
+
+    .btn-cancel {
+      background-color: #ecf0f1;
+      color: #333;
+    }
+
+    .btn-cancel:hover {
+      background-color: #d0d5d8;
+    }
+  }
+
+  .checkboxes {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.85rem;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+  }
+}
+
+.room-preview {
+  background-color: #f6f9fc;
+  border: 1px dashed #ccc;
+  padding: 1rem;
+  font-size: 0.9rem;
+  margin-top: 2rem;
+  border-radius: 6px;
+}

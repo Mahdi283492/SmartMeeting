@@ -1,0 +1,41 @@
+// You can import your theme variables here
+// @use 'src/styles' as *;
+
+.login-container {
+  max-width: 360px;
+  margin: 10vh auto;
+  padding: 2rem;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+  h1 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #00587a; // primary color
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.forgot-link {
+  text-align: center;
+  margin-top: 0.5rem;
+
+  a {
+    color: #6c757d; // secondary color
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

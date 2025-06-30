@@ -1,0 +1,85 @@
+.dashboard {
+  padding: 1.5rem;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.dashboard h2 {
+  font-size: 1.75rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dashboard h2 span {
+  border-left: 4px solid #3498db;
+  padding-left: 0.5rem;
+}
+
+.dashboard h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+}
+
+.meeting-card {
+  background-color: #f0f8ff;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.meeting-card:hover {
+  transform: scale(1.01);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.12);
+}
+
+.meeting-card p {
+  margin: 0;
+}
+
+.quick-actions {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 0.375rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.btn:hover {
+  background-color: #2980b9;
+}
+
+.availability, .notifications {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  font-size: 0.9rem;
+  color: #555;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+.no-meetings-text {
+  color: #999;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 1rem;
+}

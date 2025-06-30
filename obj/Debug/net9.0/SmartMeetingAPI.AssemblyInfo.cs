@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SmartMeetingAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d43bb43776d960c5a26080c01eb58eb4f4a0ef4c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+2020fd863a48b07c93a539fc194accdecb47d212")]
 [assembly: System.Reflection.AssemblyProductAttribute("SmartMeetingAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SmartMeetingAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

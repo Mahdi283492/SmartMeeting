@@ -52,7 +52,8 @@ namespace SmartMeetingAPI.Controllers
             {
                 UserName = model.Email,
                 Email = model.Email,
-                Name = model.Name
+                Name = model.Name,
+                EmailConfirmed = true
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);
@@ -66,6 +67,12 @@ namespace SmartMeetingAPI.Controllers
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDto model)
         {
+            Console.WriteLine("===== Claims =====");
+            foreach (var c in User.Claims)
+            {
+                Console.WriteLine($"{c.Type}: {c.Value}");
+            }
+
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && await _userManager.CheckPasswordAsync(user, model.Password))
             {
@@ -74,14 +81,16 @@ namespace SmartMeetingAPI.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, user.Email ?? string.Empty),
-                    new Claim(ClaimTypes.Name, user.UserName ?? string.Empty),
+                    new Claim(ClaimTypes.Email, user.Email ?? ""),
+                    new Claim(ClaimTypes.Name, user.UserName ?? ""),
                 };
 
                 foreach (var role in roles)
                     claims.Add(new Claim(ClaimTypes.Role, role));
 
-                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
+                var keyString = _config["Jwt:Key"] ?? throw new ArgumentNullException("Jwt:Key is missing from configuration.");
+                var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(keyString));
+
                 var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
                 var token = new JwtSecurityToken(

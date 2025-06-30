@@ -1,0 +1,32 @@
+<div class="post-minutes-container">
+  <h2 class="section-title"> Review Meeting Minutes</h2>
+
+  <div class="filters">
+    <input type="text" placeholder="Search by keyword or attendee..." class="input" />
+    <input type="date" class="input" />
+  </div>
+
+  <div class="minutes-list">
+    <div class="minutes-card" *ngFor="let minute of reviewedMinutes">
+      <div class="card-top">
+        <div>
+          <h3 class="meeting-title">{{ minute.title }}</h3>
+          <p class="meeting-date">{{ minute.date | date: 'shortDate' }}</p>
+        </div>
+        <span class="status-badge" [ngClass]="minute.status === 'Completed' ? 'completed' : 'pending'">
+          {{ minute.status }}
+        </span>
+      </div>
+
+      <p class="summary-text">
+        {{ minute.summary }}
+      </p>
+
+      <div class="actions">
+        <button class="btn btn-edit"> Edit</button>
+        <button class="btn btn-export"> Export</button>
+        <button class="btn btn-share"> Share</button>
+      </div>
+    </div>
+  </div>
+</div>

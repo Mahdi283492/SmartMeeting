@@ -1,0 +1,50 @@
+<div class="dashboard p-4">
+  <h2 class="text-2xl font-bold mb-4 flex items-center gap-2">
+    <span class="border-l-4 border-blue-500 pl-2">📅 Dashboard</span>
+  </h2>
+
+
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2">Upcoming Meetings</h3>
+    <div *ngIf="meetings.length; else noMeetings" class="space-y-2">
+      <div *ngFor="let meeting of meetings" class="bg-blue-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
+        <div>
+          <p class="font-medium">{{ meeting.start | date: 'short' }}</p>
+          <p class="text-sm text-gray-600">{{ meeting.title }}</p>
+        </div>
+        <p class="text-sm text-right text-gray-500">Room: {{ meeting.roomName }}</p>
+      </div>
+    </div>
+    <ng-template #noMeetings>
+      <p class="text-sm text-gray-400">No upcoming meetings.</p>
+    </ng-template>
+  </div>
+
+
+
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2">Quick Actions</h3>
+    <div class="flex gap-4">
+      <button class="btn">📅 Schedule Meeting</button>
+      <button class="btn">📥 Join Now</button>
+      <button class="btn">📝 View Minutes</button>
+    </div>
+  </div>
+
+
+  <div class="mb-6">
+    <h3 class="text-lg font-semibold mb-2">Room Availability</h3>
+    <div class="bg-white border rounded-lg p-4 shadow-sm text-sm text-gray-600">
+      Calendar/grid view placeholder...
+    </div>
+  </div>
+
+
+  <div>
+    <h3 class="text-lg font-semibold mb-2">Notifications</h3>
+    <ul class="text-sm text-gray-700 space-y-1">
+      <li>🔔 Meeting “Team Sync” starts in 1 hour</li>
+      <li>📝 Pending minutes for “Product Planning”</li>
+    </ul>
+  </div>
+</div>

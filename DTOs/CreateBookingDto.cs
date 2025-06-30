@@ -5,8 +5,6 @@ namespace SmartMeetingAPI.DTOs
 {
     public class CreateBookingDto
     {
-        [Required]
-        public int UserID { get; set; }
 
         [Required]
         public int RoomID { get; set; }

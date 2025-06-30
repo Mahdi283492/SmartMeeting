@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMeetingAPI.Models;
 using SmartMeetingAPI.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace SmartMeetingAPI.Controllers
 {
@@ -32,19 +34,23 @@ namespace SmartMeetingAPI.Controllers
         }
 
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Booking>> Create([FromBody] CreateBookingDto input)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
-            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
-                return BadRequest($"No User with ID {input.UserID}.");
+
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out var userId))
+                return BadRequest("Invalid user ID from token");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
                 return BadRequest($"No Room with ID {input.RoomID}.");
+
             var booking = new Booking
             {
-                UserID = input.UserID,
+                UserID = userId,
                 RoomID = input.RoomID,
                 StartTime = input.StartTime,
                 EndTime = input.EndTime,
@@ -58,19 +64,26 @@ namespace SmartMeetingAPI.Controllers
         }
 
 
+
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateBookingDto input)
         {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (!int.TryParse(userIdStr, out var userId))
+                return BadRequest("Invalid user ID from token");
+
             var booking = await _context.Bookings.FindAsync(id);
             if (booking is null)
                 return NotFound();
-            if (!await _context.Users.AnyAsync(u => u.Id == input.UserID))
-                return BadRequest($"No User with ID {input.UserID}.");
+
+            
+            if (booking.UserID != userId)
+                return Forbid("You can only update your own bookings.");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
                 return BadRequest($"No Room with ID {input.RoomID}.");
 
-            booking.UserID = input.UserID;
             booking.RoomID = input.RoomID;
             booking.StartTime = input.StartTime;
             booking.EndTime = input.EndTime;
@@ -79,6 +92,7 @@ namespace SmartMeetingAPI.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
 
 
         [HttpDelete("{id}")]

@@ -174,3 +174,10 @@ C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\Microsoft.AspNetCore.Cryptograph
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\Microsoft.Extensions.Identity.Stores.dll
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\angular.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\package-lock.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\package.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.app.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.spec.json
+C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\proxy.conf.json

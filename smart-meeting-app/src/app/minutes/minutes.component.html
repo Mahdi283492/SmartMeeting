@@ -1,0 +1,32 @@
+<div class="minutes-container">
+  <h2 class="section-title">Meeting Minutes</h2>
+
+  <div class="filter-section">
+    <input type="text" placeholder="Search meetings..." class="input" />
+    <input type="date" class="input" />
+  </div>
+
+  <div class="minutes-list">
+    <div class="minutes-card" *ngFor="let m of minutes">
+      <div class="card-header">
+        <h3 class="meeting-title">{{ m.title }}</h3>
+        <p class="meeting-date">{{ m.date | date: 'shortDate' }}</p>
+      </div>
+
+      <p class="attendees">Attendees: {{ m.attendees.join(', ') }}</p>
+
+      <div class="status-actions">
+        <span [ngClass]="m.recorded ? 'status-recorded' : 'status-pending'">
+          {{ m.recorded ? 'Minutes Recorded' : 'Pending' }}
+        </span>
+
+        <div class="btn-group">
+          <button class="btn btn-view">
+            {{ m.recorded ? 'View' : 'Add' }} Minutes
+          </button>
+          <button class="btn btn-export">Export PDF</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
