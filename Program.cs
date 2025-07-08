@@ -109,6 +109,43 @@ using (var scope = app.Services.CreateScope())
         if (!await roleManager.RoleExistsAsync(role))
             await roleManager.CreateAsync(new IdentityRole<int>(role));
     }
+
+    
+    var adminEmail = "admin@smartmeet.com";
+    var adminUser = await userManager.FindByEmailAsync(adminEmail);
+
+    if (adminUser == null)
+    {
+        var newAdmin = new ApplicationUser
+        {
+            UserName = adminEmail,
+            Email = adminEmail,
+            Name = "System Admin",
+            EmailConfirmed = true
+        };
+
+        var result = await userManager.CreateAsync(newAdmin, "Admin@1234"); 
+        if (result.Succeeded)
+        {
+            await userManager.AddToRoleAsync(newAdmin, "Admin");
+            Console.WriteLine(" Admin user created and assigned.");
+        }
+        else
+        {
+            Console.WriteLine(" Failed to create admin user:");
+            foreach (var err in result.Errors)
+                Console.WriteLine($"- {err.Description}");
+        }
+    }
+    else
+    {
+      
+        if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+            await userManager.AddToRoleAsync(adminUser, "Admin");
+
+        Console.WriteLine("Admin user already exists.");
+    }
 }
+
 
 app.Run();

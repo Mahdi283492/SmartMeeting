@@ -26,6 +26,7 @@ namespace SmartMeetingAPI.Controllers
         }
 
 
+
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetById(int id)
         {
@@ -35,7 +36,7 @@ namespace SmartMeetingAPI.Controllers
 
 
         [Authorize]
-        [HttpPost]
+        [HttpPost("book")]
         public async Task<ActionResult<Booking>> Create([FromBody] CreateBookingDto input)
         {
             if (!ModelState.IsValid)
@@ -47,6 +48,14 @@ namespace SmartMeetingAPI.Controllers
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
                 return BadRequest($"No Room with ID {input.RoomID}.");
+            bool hasConflict = await _context.Bookings.AnyAsync(b =>
+b.RoomID == input.RoomID &&
+b.StartTime < input.EndTime &&
+b.EndTime > input.StartTime);
+
+            if (hasConflict)
+                return BadRequest(new { message = "This room is already booked during the selected time." });
+
 
             var booking = new Booking
             {
@@ -77,7 +86,7 @@ namespace SmartMeetingAPI.Controllers
             if (booking is null)
                 return NotFound();
 
-            
+
             if (booking.UserID != userId)
                 return Forbid("You can only update your own bookings.");
 
@@ -92,6 +101,54 @@ namespace SmartMeetingAPI.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+        [Authorize]
+          [HttpGet("my")]
+          public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
+          {
+              var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+              if (!int.TryParse(userIdStr, out var userId))
+                  return BadRequest("Invalid user ID from token");
+
+              var myBookings = await _context.Bookings
+                  .Where(b => b.UserID == userId)
+                  .Include(b => b.Room)
+                  .OrderByDescending(b => b.StartTime)
+                  .Select(b => new
+                  {
+                      b.ID,
+                      RoomName = b.Room.Name,
+                      b.StartTime,
+                      b.EndTime,
+                      b.Status
+                  })
+                  .ToListAsync();
+
+              return Ok(myBookings);
+          }
+  
+  /*          [HttpGet("my")]
+public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
+{
+    // TEMP: Use hardcoded user ID 1 to test rendering
+    int userId = 2;
+
+    var myBookings = await _context.Bookings
+        .Where(b => b.UserID == userId)
+        .Include(b => b.Room)
+        .OrderByDescending(b => b.StartTime)
+        .Select(b => new
+        {
+            b.ID,
+            // RoomName = b.Room != null ? b.Room.Name : "Unknown",
+           
+            b.StartTime,
+            b.EndTime,
+            b.Status
+        })
+        .ToListAsync();
+
+    return Ok(myBookings);
+}*/
 
 
 
@@ -107,4 +164,5 @@ namespace SmartMeetingAPI.Controllers
             return NoContent();
         }
     }
+
 }

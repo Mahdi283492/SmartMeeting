@@ -36,6 +36,10 @@ export const routes: Routes = [
       ),
     canActivate: [AuthGuard],
   },
+{
+  path: 'my-bookings',
+  loadComponent: () => import('./my-bookings/my-bookings.component').then(m => m.MyBookingsComponent)
+},
 
   { path: '**', redirectTo: 'login' },
 ];

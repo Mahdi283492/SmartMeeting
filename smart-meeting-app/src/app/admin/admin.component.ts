@@ -1,34 +1,28 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-admin',
-  standalone: true,
-  imports: [CommonModule, FormsModule],
   templateUrl: './admin.component.html',
-  styleUrl: './admin.component.scss'
+  styleUrls: ['./admin.component.scss']
 })
-export class AdminComponent {
-  rooms = [
-    { name: 'Room A', status: 'Available', capacity: 10, equipment: ['Mic', 'Projector'] },
-    { name: 'Room B', status: 'Booked', capacity: 20, equipment: ['Projector'] },
-    { name: 'Room C', status: 'Maintenance', capacity: 15, equipment: [] }
-  ];
+export class AdminComponent implements OnInit {
+  summary: any = null;
+  error = '';
+  loading = true;
 
-  newRoom = {
-    name: '',
-    capacity: 0,
-    equipment: ''
-  };
+  constructor(private http: HttpClient) {}
 
-  addRoom() {
-    this.rooms.push({
-      name: this.newRoom.name,
-      status: 'Available',
-      capacity: this.newRoom.capacity,
-      equipment: this.newRoom.equipment.split(',').map(e => e.trim())
+  ngOnInit(): void {
+    this.http.get('/api/Admin/summary').subscribe({
+      next: data => {
+        this.summary = data;
+        this.loading = false;
+      },
+      error: err => {
+        this.error = err.error?.message || 'Failed to load dashboard summary';
+        this.loading = false;
+      }
     });
-    this.newRoom = { name: '', capacity: 0, equipment: '' };
   }
 }

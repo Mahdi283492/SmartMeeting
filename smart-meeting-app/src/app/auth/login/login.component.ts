@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
-import { CommonModule }  from '@angular/common';
-import { FormsModule }  from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { AuthService } from '../../core/auth.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-login',
@@ -28,15 +29,33 @@ export class LoginComponent {
 
   constructor(
     private auth: AuthService,
+    private http: HttpClient,
     private router: Router
   ) {}
 
   onSubmit(): void {
     this.error = null;
+
     this.auth.login(this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/dashboard']),
-      error: err => this.error = 'Login failed: ' + (err.error?.title || err.statusText)
+      next: () => {
+
+        this.http.get<any>('/api/Auth/me').subscribe({
+          next: user => {
+            if (user.roles.includes('Admin')) {
+              this.router.navigate(['/admin']);
+            } else {
+              this.router.navigate(['/dashboard']);
+            }
+          },
+          error: err => {
+            console.error('Failed to retrieve user info', err);
+            this.router.navigate(['/dashboard']); 
+          }
+        });
+      },
+      error: err => {
+        this.error = 'Login failed: ' + (err.error?.title || err.statusText);
+      }
     });
   }
 }
-

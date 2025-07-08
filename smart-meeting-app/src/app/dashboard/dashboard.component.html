@@ -3,34 +3,36 @@
     <span class="border-l-4 border-blue-500 pl-2">📅 Dashboard</span>
   </h2>
 
-
   <div class="mb-6">
-    <h3 class="text-lg font-semibold mb-2">Upcoming Meetings</h3>
-    <div *ngIf="meetings.length; else noMeetings" class="space-y-2">
-      <div *ngFor="let meeting of meetings" class="bg-blue-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
+    <h3 class="text-lg font-semibold mb-2">Upcoming Bookings</h3>
+    <div *ngIf="bookings.length; else noBookings" class="space-y-2">
+      <div *ngFor="let booking of bookings"
+        class="bg-blue-50 p-4 rounded-lg shadow-sm flex justify-between items-center">
         <div>
-          <p class="font-medium">{{ meeting.start | date: 'short' }}</p>
-          <p class="text-sm text-gray-600">{{ meeting.title }}</p>
+          <p class="font-medium">{{ booking.startTime | date: 'short' }}</p>
+          <p class="text-sm text-gray-600">Status: {{ booking.status }}</p>
         </div>
-        <p class="text-sm text-right text-gray-500">Room: {{ meeting.roomName }}</p>
+        <p class="text-sm text-right text-gray-500">Room ID: {{ booking.roomID }}</p>
       </div>
     </div>
-    <ng-template #noMeetings>
-      <p class="text-sm text-gray-400">No upcoming meetings.</p>
+    <ng-template #noBookings>
+      <p class="text-sm text-gray-400">No upcoming bookings.</p>
     </ng-template>
   </div>
-
-
 
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">Quick Actions</h3>
     <div class="flex gap-4">
-      <button class="btn">📅 Schedule Meeting</button>
-      <button class="btn">📥 Join Now</button>
-      <button class="btn">📝 View Minutes</button>
+      <button class="btn">Schedule Meeting</button>
+      <button class="btn">Join Now</button>
+      <button class="btn">View Minutes</button>
+      <button class="btn btn-primary" routerLink="/booking">Book a Room</button>
+      <button class="btn btn-primary" routerLink="/my-bookings">
+        View My Bookings
+      </button>
+
     </div>
   </div>
-
 
   <div class="mb-6">
     <h3 class="text-lg font-semibold mb-2">Room Availability</h3>
@@ -38,7 +40,6 @@
       Calendar/grid view placeholder...
     </div>
   </div>
-
 
   <div>
     <h3 class="text-lg font-semibold mb-2">Notifications</h3>

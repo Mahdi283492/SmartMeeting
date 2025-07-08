@@ -1,27 +1,36 @@
-import { Component, OnInit }     from '@angular/core';
-import { CommonModule }           from '@angular/common';
-import { MeetingService, Meeting } from '../core/meeting.service';
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { HttpClient } from '@angular/common/http';
+
+interface Booking {
+  id: number;
+  startTime: string;
+  endTime: string;
+  roomID: number;
+  status: string;
+}
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ CommonModule ],
+  imports: [CommonModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-[x: string]: any;
-  meetings: Meeting[] = [];
+  bookings: Booking[] = [];
+  error = '';
 
-  constructor(private meetingsSvc: MeetingService) {}
+  constructor(private http: HttpClient) {}
 
   ngOnInit() {
-    this.meetingsSvc.getUpcoming().subscribe({
-      next: data => this.meetings = data,
+    this.http.get<Booking[]>('/api/Bookings').subscribe({
+      next: data => this.bookings = data,
       error: err => {
-  console.error('Failed to load meetings', err);
-  this['error'] = err.error?.title || err.message || 'Something went wrong';
-}
+        console.error('Failed to load bookings', err);
+        this.error = err.error?.title || err.message || 'Something went wrong';
+      }
     });
   }
 }
