@@ -1,33 +1,35 @@
-<div class="my-bookings p-6 max-w-3xl mx-auto">
-  <div class="header flex items-center justify-between mb-4">
-    <h2 class="text-3xl font-semibold text-gray-800"> My Bookings</h2>
-    <button class="btn-back" (click)="goBack()">← Dashboard</button>
+<div class="my-bookings">
+  <div class="header">
+    <h2>My Bookings</h2>
+    <button class="btn-back" (click)="goBack()">Back to Dashboard</button>
   </div>
 
-  <div *ngIf="loading" class="text-gray-500">Loading your bookings...</div>
-  <div *ngIf="error" class="text-red-500 mb-4">{{ error }}</div>
+  <div *ngIf="loading" class="info-text">Loading your bookings...</div>
+  <div *ngIf="error" class="error-text">{{ error }}</div>
 
-  <div *ngIf="!loading && bookings.length === 0" class="text-gray-500 mt-6 text-center">
+  <div *ngIf="!loading && bookings.length === 0" class="info-text empty">
     You have no active bookings.
   </div>
 
-  <div *ngFor="let booking of bookings" class="booking-card shadow-sm hover:shadow-md transition-shadow duration-300">
-    <div>
-      <p class="font-semibold text-blue-800">Room: <span class="font-normal text-gray-700">{{ booking.roomName }}</span></p>
-      <p>Start: {{ booking.startTime | date:'short' }}</p>
-      <p>End: {{ booking.endTime | date:'short' }}</p>
-      <p>Status: <span [ngClass]="{
-        'text-green-600': booking.status === 'Confirmed',
-        'text-yellow-600': booking.status === 'Pending'
-      }">{{ booking.status }}</span></p>
+  <div *ngFor="let booking of bookings" class="booking-card">
+    <div class="booking-info">
+      <p><strong>Room:</strong> {{ booking.roomName }}</p>
+      <p><strong>Start:</strong> {{ booking.startTime | date:'short' }}</p>
+      <p><strong>End:</strong> {{ booking.endTime | date:'short' }}</p>
+      <p>
+        <strong>Status:</strong>
+        <span [ngClass]="{
+          'status-confirmed': booking.status === 'Confirmed',
+          'status-pending': booking.status === 'Pending'
+        }">{{ booking.status }}</span>
+      </p>
     </div>
     <button class="btn-cancel" (click)="showCancelModal(booking.id)">Cancel</button>
   </div>
 
-
   <div class="modal-backdrop" *ngIf="bookingToCancel">
     <div class="modal">
-      <p class="text-lg font-medium text-gray-800">Are you sure you want to cancel this booking?</p>
+      <p class="modal-title">Are you sure you want to cancel this booking?</p>
       <div class="modal-actions">
         <button (click)="confirmCancel()" class="btn-danger">Yes, Cancel</button>
         <button (click)="cancelCancel()" class="btn-secondary">No</button>

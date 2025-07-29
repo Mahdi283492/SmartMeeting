@@ -1,12 +1,14 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMeetingAPI.Models;
-using SmartMeetingAPI.DTOs;    
+using SmartMeetingAPI.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SmartMeetingAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+   
     public class RoomsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -16,12 +18,12 @@ namespace SmartMeetingAPI.Controllers
             _context = context;
         }
 
-       
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Room>>> GetAll()
-            => await _context.Rooms.ToListAsync();
+                    => await _context.Rooms.ToListAsync();
 
-        
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Room>> GetById(int id)
         {
@@ -29,7 +31,7 @@ namespace SmartMeetingAPI.Controllers
             return room is null ? NotFound() : room;
         }
 
-        
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public async Task<ActionResult<Room>> Create([FromBody] CreateRoomDto input)
         {
@@ -38,7 +40,7 @@ namespace SmartMeetingAPI.Controllers
 
             var room = new Room
             {
-                Name     = input.Name,
+                Name = input.Name,
                 Capacity = input.Capacity,
                 Location = input.Location,
                 Features = input.Features
@@ -53,7 +55,7 @@ namespace SmartMeetingAPI.Controllers
                 room
             );
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateRoomDto input)
         {
@@ -61,7 +63,7 @@ namespace SmartMeetingAPI.Controllers
             if (room is null)
                 return NotFound();
 
-            room.Name     = input.Name;
+            room.Name = input.Name;
             room.Capacity = input.Capacity;
             room.Location = input.Location;
             room.Features = input.Features;
@@ -70,7 +72,7 @@ namespace SmartMeetingAPI.Controllers
             return NoContent();
         }
 
-        
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

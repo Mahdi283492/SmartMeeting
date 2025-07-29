@@ -1,8 +1,9 @@
 <div class="booking-container">
   <h2 class="title">Book a Meeting Room</h2>
+    <button class="btn-back" (click)="goBack()">Back to Dashboard</button>
 
   <form [formGroup]="bookingForm" (ngSubmit)="bookMeeting()">
-    
+
     <div class="form-group">
       <label for="roomID">Choose Room</label>
       <select formControlName="roomID" id="roomID">

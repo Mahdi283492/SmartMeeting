@@ -1,0 +1,33 @@
+<div class="user-edit-container" *ngIf="!loading; else loadingTpl">
+  <h2>Edit User</h2>
+  <button class="btn btn-outline-primary mb-3" (click)="goBack()">← Back to User List</button>
+
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="success" class="alert alert-success">{{ success }}</div>
+
+  <form (ngSubmit)="save()" #editForm="ngForm" class="edit-form">
+    <div class="mb-3">
+      <label>Name</label>
+      <input class="form-control" [(ngModel)]="user.name" name="name" required />
+    </div>
+    <div class="mb-3">
+      <label>Email</label>
+      <input class="form-control" [(ngModel)]="user.email" name="email" required disabled />
+    </div>
+    <div class="mb-3">
+      <label>Role</label>
+      <select class="form-select" [(ngModel)]="user.role" name="role" required>
+        <option>User</option>
+        <option>Admin</option>
+        <option>Guest</option>
+      </select>
+    </div>
+    <button type="submit" class="btn btn-primary" [disabled]="editForm.invalid || saving">
+      Save Changes
+    </button>
+  </form>
+</div>
+
+<ng-template #loadingTpl>
+  <p>Loading user details...</p>
+</ng-template>

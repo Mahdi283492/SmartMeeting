@@ -19,7 +19,13 @@ export const appConfig: ApplicationConfig = {
       withFetch(),
       withInterceptors([
         (req, next) => {
-          const token = localStorage.getItem('token');
+          let token = '';
+
+          
+          if (typeof window !== 'undefined') {
+            token = localStorage.getItem('token') || '';
+          }
+
           if (token) {
             const authReq = req.clone({
               setHeaders: {
@@ -29,6 +35,7 @@ export const appConfig: ApplicationConfig = {
             console.log('[Interceptor] Attached token:', token);
             return next(authReq);
           }
+
           return next(req);
         }
       ])

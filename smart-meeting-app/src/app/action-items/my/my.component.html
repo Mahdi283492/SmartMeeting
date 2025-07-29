@@ -1,0 +1,46 @@
+<div class="my-action-items">
+  <div class="header">
+    <h2>My Action Items</h2>
+    <button class="btn-back" (click)="goBack()">Back to Dashboard</button>
+  </div>
+
+  <div *ngIf="loading" class="loading">Loading action items...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <div *ngIf="!loading && items.length === 0" class="empty">
+    No action items assigned to you.
+  </div>
+
+  <table *ngIf="items.length > 0" class="table table-hover">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Meeting</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of items">
+        <td>{{ item.description }}</td>
+        <td>{{ item.meetingTitle }}</td>
+        <td>{{ item.dueDate | date:'shortDate' }}</td>
+        <td [ngClass]="{
+              'text-green': item.status === 'Completed',
+              'text-yellow': item.status === 'In Progress',
+              'text-red': item.status === 'Pending'
+            }">
+          {{ item.status }}
+        </td>
+        <td>
+          <button class="btn btn-sm btn-success"
+                  (click)="markCompleted(item)"
+                  [disabled]="item.status === 'Completed'">
+            Mark Completed
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

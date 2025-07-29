@@ -1,0 +1,30 @@
+<div class="my-meetings">
+  <div class="header">
+    <h2>My Upcoming Meetings</h2>
+    <button class="btn btn-outline-primary" (click)="goBack()">← Back</button>
+  </div>
+
+  <div *ngIf="loading">Loading meetings...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
+  <div *ngIf="!loading && meetings.length === 0" class="alert alert-info">
+    You have no upcoming meetings.
+  </div>
+
+  <table *ngIf="meetings.length > 0" class="table table-hover">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Room</th>
+        <th>Start</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of meetings">
+        <td>{{ m.title }}</td>
+        <td>{{ m.roomName }}</td>
+        <td>{{ m.start | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

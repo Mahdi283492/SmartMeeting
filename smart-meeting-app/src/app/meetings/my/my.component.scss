@@ -1,0 +1,82 @@
+
+.my-meetings {
+  font-family: 'Segoe UI', sans-serif;
+  color: #1f2937;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .btn {
+      padding: 0.5rem 1.2rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      border: 1px solid #3b82f6;
+      color: #3b82f6;
+      background: white;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #3b82f6;
+        color: white;
+      }
+    }
+  }
+
+  .alert-info {
+    font-size: 1rem;
+    color: #3b82f6;
+    background: #eff6ff;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  .alert-danger {
+    font-size: 1rem;
+    color: #dc2626;
+    background: #fee2e2;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+
+    th, td {
+      padding: 0.75rem 1rem;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+    }
+
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    tr:hover td {
+      background: #f3f4f6;
+    }
+  }
+}

@@ -1,0 +1,35 @@
+<div class="create-meeting-container">
+  <h3>Schedule a Meeting</h3>
+    <button class="btn btn-outline-primary" (click)="goToDashboard()">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </button>
+
+  <form [formGroup]="meetingForm" (ngSubmit)="submit()">
+    <div class="mb-3">
+      <label class="form-label">Select Booking</label>
+      <select class="form-select" formControlName="bookingID">
+        <option *ngFor="let b of bookings" [value]="b.id">
+          {{ b.roomName }} | {{ b.startTime | date:'short' }} - {{ b.endTime | date:'short' }}
+        </option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Title</label>
+      <input class="form-control" type="text" formControlName="title" />
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Agenda</label>
+      <textarea class="form-control" formControlName="agenda" rows="3"></textarea>
+    </div>
+
+    <div class="mt-3">
+      <button type="submit" class="btn btn-primary me-2" [disabled]="meetingForm.invalid">Create</button>
+      <button type="button" class="btn btn-secondary" (click)="cancel()">Cancel</button>
+    </div>
+  </form>
+
+  <div *ngIf="successMessage" class="alert alert-success mt-3">{{ successMessage }}</div>
+  <div *ngIf="errorMessage" class="alert alert-danger mt-3">{{ errorMessage }}</div>
+</div>

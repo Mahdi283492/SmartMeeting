@@ -18,11 +18,11 @@ namespace SmartMeetingAPI.Controllers
         public MeetingsController(AppDbContext context)
             => _context = context;
 
-        
+
         [HttpGet("upcoming")]
         public async Task<ActionResult<IEnumerable<MeetingSummaryDto>>> GetUpcoming()
         {
-                Console.WriteLine($"Authorization header: {Request.Headers["Authorization"]}");
+            Console.WriteLine($"Authorization header: {Request.Headers["Authorization"]}");
 
             Console.WriteLine("===== Incoming User Claims =====");
             foreach (var c in User.Claims)
@@ -33,7 +33,7 @@ namespace SmartMeetingAPI.Controllers
             var userIdClaim = User.FindFirst("http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier");
             var userIdStr = userIdClaim?.Value;
             Console.WriteLine($"Parsed UserId string (manual): {userIdStr}");
-Console.WriteLine("User.Identity.IsAuthenticated: " + User.Identity?.IsAuthenticated);
+            Console.WriteLine("User.Identity.IsAuthenticated: " + User.Identity?.IsAuthenticated);
 
             if (!int.TryParse(userIdStr, out int userId))
                 return BadRequest("Invalid user ID in token.");
@@ -78,7 +78,7 @@ Console.WriteLine("User.Identity.IsAuthenticated: " + User.Identity?.IsAuthentic
             if (!await _context.Bookings.AnyAsync(b => b.ID == input.BookingID))
                 return BadRequest($"No Booking with ID {input.BookingID}.");
             if (await _context.Meetings.AnyAsync(m => m.BookingID == input.BookingID))
-                return Conflict($"Booking {input.BookingID} already has a meeting.");
+                return Conflict(new { message = $"Room is already booked for the selected time." });
             var meeting = new Meeting
             {
                 BookingID = input.BookingID,

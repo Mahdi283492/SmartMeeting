@@ -2,34 +2,19 @@
   <h1>Smart Meeting</h1>
 
   <form (ngSubmit)="onSubmit()" class="login-form">
+    <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Email or Username</mat-label>
-      <input
-        matInput
-        type="text"
-        [(ngModel)]="email"
-        name="email"
-        required
-      />
+      <input matInput type="text" [(ngModel)]="email" name="email" required />
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
       <mat-label>Password</mat-label>
-      <input
-        matInput
-        type="password"
-        [(ngModel)]="password"
-        name="password"
-        required
-      />
+      <input matInput type="password" [(ngModel)]="password" name="password" required />
     </mat-form-field>
 
-    <button
-      mat-raised-button
-      color="primary"
-      class="full-width"
-      type="submit"
-    >
+    <button mat-raised-button color="primary" class="full-width" type="submit">
       Login
     </button>
 

@@ -27,18 +27,13 @@ export class LoginComponent {
   password = '';
   error: string | null = null;
 
-  constructor(
-    private auth: AuthService,
-    private http: HttpClient,
-    private router: Router
-  ) {}
+  constructor(private auth: AuthService, private http: HttpClient, private router: Router) {}
 
   onSubmit(): void {
     this.error = null;
 
     this.auth.login(this.email, this.password).subscribe({
       next: () => {
-
         this.http.get<any>('/api/Auth/me').subscribe({
           next: user => {
             if (user.roles.includes('Admin')) {
@@ -47,14 +42,17 @@ export class LoginComponent {
               this.router.navigate(['/dashboard']);
             }
           },
-          error: err => {
-            console.error('Failed to retrieve user info', err);
-            this.router.navigate(['/dashboard']); 
+          error: () => {
+            this.router.navigate(['/dashboard']);
           }
         });
       },
       error: err => {
-        this.error = 'Login failed: ' + (err.error?.title || err.statusText);
+        if (err.status === 401) {
+          this.error = 'Invalid email or password!';
+        } else {
+          this.error = 'Login failed. Please try again later.';
+        }
       }
     });
   }

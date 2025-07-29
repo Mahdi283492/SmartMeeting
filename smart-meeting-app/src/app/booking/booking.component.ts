@@ -36,7 +36,9 @@ export class BookingComponent implements OnInit {
       status: ['Pending', Validators.required],
     });
   }
-
+ goBack(): void {
+    this.router.navigate(['/dashboard']);
+  }
   ngOnInit(): void {
     this.loadRooms();
   }

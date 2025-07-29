@@ -1,0 +1,37 @@
+<div class="all-minutes-container">
+<div class="p-4">
+   <button class="btn btn-outline-primary" (click)="goToDashboard()">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </button>
+  <h3 class="text-xl font-bold mb-4">All Minutes</h3>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <table class="table table-hover" *ngIf="minutes.length; else empty">
+    <thead>
+      <tr>
+        <th>Meeting</th>
+        <th>Discussion</th>
+        <th>Decisions</th>
+        <th>Start</th>
+        <th>Room</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of minutes">
+        <td>{{ m.meetingTitle }}</td>
+        <td>{{ m.discussionPoints }}</td>
+        <td>{{ m.decisions }}</td>
+        <td>{{ m.startTime | date:'short' }}</td>
+        <td>{{ m.roomName }}</td>
+        <td>
+          <button class="btn btn-outline-info btn-sm" (click)="viewDetails(m.id)">View</button>
+          <button class="btn btn-outline-danger btn-sm" (click)="deleteMinutes(m.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <ng-template #empty>
+    <p class="text-gray-500">No minutes found.</p>
+  </ng-template>
+</div>
+</div>

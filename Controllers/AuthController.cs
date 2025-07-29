@@ -53,7 +53,8 @@ namespace SmartMeetingAPI.Controllers
                 UserName = model.Email,
                 Email = model.Email,
                 Name = model.Name,
-                EmailConfirmed = true
+                EmailConfirmed = true,
+               
             };
 
             var result = await _userManager.CreateAsync(user, model.Password);

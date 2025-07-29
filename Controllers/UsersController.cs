@@ -1,7 +1,10 @@
-/*using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SmartMeetingAPI.DTOs;
 using SmartMeetingAPI.Models;
+using System.Security.Claims;
 
 namespace SmartMeetingAPI.Controllers
 {
@@ -9,98 +12,172 @@ namespace SmartMeetingAPI.Controllers
     [Route("api/[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole<int>> _roleManager;
 
-        public UsersController(AppDbContext context)
+        public UsersController(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole<int>> roleManager)
         {
-            _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
 
-
+     
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUsers()
         {
-            return await _context.Users.ToListAsync();
-        }
+            var users = await _userManager.Users.ToListAsync();
+            var result = new List<object>();
 
-
-        /*   [HttpGet("{id}")]
-           public async Task<ActionResult<User>> GetUser(int id)
-           {
-               var user = await _context.Users.FindAsync(id);
-               if (user == null)
-                   return NotFound();
-
-               return user;
-           }*/
-     /*   [HttpGet("{id}")]
-        public async Task<ActionResult<ApplicationUser>> GetUserById(int id)
-        {
-            var user = await _context.Users.FindAsync(id);
-
-            if (user == null)
+            foreach (var u in users)
             {
-                return NotFound();
+                var roles = await _userManager.GetRolesAsync(u);
+                result.Add(new
+                {
+                    u.Id,
+                    u.Name,
+                    u.Email,
+                    Roles = roles
+                });
             }
 
-            return user;
+            return Ok(result);
         }
 
+        [HttpGet("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return NotFound();
 
+            var roles = await _userManager.GetRolesAsync(user);
+
+            return Ok(new
+            {
+                user.Id,
+                user.Name,
+                user.Email,
+                Roles = roles
+            });
+        }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateUser([FromBody] CreateUserDto input)
         {
-
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var user = new ApplicationUser
+            if (await _userManager.FindByEmailAsync(input.Email) != null)
+                return BadRequest(new { message = "Email already exists." });
+
+            var newUser = new ApplicationUser
             {
-                Name = input.Name,
+                UserName = input.Email,
                 Email = input.Email,
-                PasswordHash = input.PasswordHash,
-                
+                Name = input.Name
             };
 
-            _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            var createResult = await _userManager.CreateAsync(newUser, input.Password);
+            if (!createResult.Succeeded)
+                return BadRequest(createResult.Errors);
 
+            if (!await _roleManager.RoleExistsAsync(input.Role))
+                await _roleManager.CreateAsync(new IdentityRole<int>(input.Role));
 
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
+            await _userManager.AddToRoleAsync(newUser, input.Role);
+
+            return CreatedAtAction(nameof(GetUserById), new { id = newUser.Id }, new
+            {
+                newUser.Id,
+                newUser.Name,
+                newUser.Email,
+                Roles = new[] { input.Role }
+            });
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUser(int id, [FromBody] ApplicationUser input)
+ [HttpPut("{id}")]
+[Authorize(Roles = "Admin")]
+public async Task<IActionResult> UpdateUser(int id, [FromBody] UpdateUserDto input)
+{
+    var user = await _userManager.FindByIdAsync(id.ToString());
+    if (user == null)
+        return NotFound();
+
+    user.Name = input.Name;
+    user.Email = input.Email;
+    user.UserName = input.Email;
+
+    var updateResult = await _userManager.UpdateAsync(user);
+    if (!updateResult.Succeeded)
+        return BadRequest(updateResult.Errors);
+
+    var currentRoles = await _userManager.GetRolesAsync(user);
+    await _userManager.RemoveFromRolesAsync(user, currentRoles);
+
+    if (!await _roleManager.RoleExistsAsync(input.Role))
+        await _roleManager.CreateAsync(new IdentityRole<int>(input.Role));
+
+    await _userManager.AddToRoleAsync(user, input.Role);
+
+    return NoContent();
+}
+
+
+        [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var user = await _userManager.FindByIdAsync(id.ToString());
+            if (user == null)
+                return NotFound();
+
+            var result = await _userManager.DeleteAsync(user);
+            return result.Succeeded ? NoContent() : BadRequest(result.Errors);
+        }
+
+     
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> GetMyProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            var roles = await _userManager.GetRolesAsync(user);
+            return Ok(new
+            {
+                user.Id,
+                user.Name,
+                user.Email,
+                Roles = roles
+            });
+        }
+
+        [HttpPut("me")]
+        [Authorize]
+        public async Task<IActionResult> UpdateMyProfile([FromBody] UpdateProfileDto input)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(userId);
             if (user == null)
                 return NotFound();
 
             user.Name = input.Name;
-            user.Email = input.Email;
-            user.PasswordHash = input.PasswordHash;
-          
+            if (!string.IsNullOrWhiteSpace(input.NewPassword))
+            {
+                var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                var passwordResult = await _userManager.ResetPasswordAsync(user, token, input.NewPassword);
+                if (!passwordResult.Succeeded)
+                    return BadRequest(passwordResult.Errors);
+            }
 
-            await _context.SaveChangesAsync();
-            return NoContent();
+            var updateResult = await _userManager.UpdateAsync(user);
+            return updateResult.Succeeded ? NoContent() : BadRequest(updateResult.Errors);
         }
-
-
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int id)
-        {
-    
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
-                return NotFound();
-
-            
-            _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
-            return NoContent();
-        }
-
     }
 }
-*/

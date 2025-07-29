@@ -1,32 +1,30 @@
-<div class="active-meeting-container">
-  <h2 class="section-title"> Active Meeting</h2>
-
-  <div class="meeting-info-card">
-    <p><strong> Title:</strong> Team Sync</p>
-    <p><strong> Time:</strong> 9:30 AM – 10:00 AM</p>
-    <p><strong> Attendees:</strong> John, Sarah, Ali</p>
+<div class="meetings-container">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h3>Upcoming Meetings</h3>
+    <div>
+      <button class="btn btn-outline-secondary me-2" (click)="goBack()">← Dashboard</button>
+      <button class="btn btn-primary" (click)="goToCreate()">+ Schedule Meeting</button>
+    </div>
   </div>
 
-  <div class="meeting-controls">
-    <button class="btn btn-start">Start Meeting</button>
-    <button class="btn btn-end">End Meeting</button>
-    <span class="timer"> Timer: 00:12:34</span>
-  </div>
+  <div *ngIf="loading" class="alert alert-info">Loading meetings...</div>
+  <div *ngIf="error" class="alert alert-danger">{{ error }}</div>
+  <div *ngIf="!loading && meetings.length === 0" class="alert alert-warning">No upcoming meetings</div>
 
-  <div class="action-buttons">
-    <button class="btn btn-action"> Take Notes</button>
-    <button class="btn btn-action"> Share Screen</button>
-    <button class="btn btn-invite"> Invite Participant</button>
-  </div>
-
-  <div class="transcription-section">
-    <h3 class="subheading"> Live Transcription</h3>
-    <button class="btn btn-toggle">Toggle Transcription</button>
-    <p class="transcript-preview">Live transcript will display here...</p>
-  </div>
-
-  <div class="join-link">
-    <h3 class="subheading"> Join Link</h3>
-    <a href="#">Join via Zoom</a>
-  </div>
+  <table *ngIf="!loading && meetings.length > 0" class="table table-hover align-middle">
+    <thead class="table-light">
+      <tr>
+        <th>Title</th>
+        <th>Room</th>
+        <th>Start Time</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of meetings">
+        <td>{{ m.title }}</td>
+        <td>{{ m.roomName }}</td>
+        <td>{{ m.start | date:'short' }}</td>
+      </tr>
+    </tbody>
+  </table>
 </div>

@@ -1,0 +1,80 @@
+<div class="minutes-details-container">
+  <div *ngIf="minutesDetails; else loadingTpl">
+    <button class="btn btn-outline-primary" (click)="goToDashboard()">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </button>
+
+    <h3>{{ minutesDetails.meetingTitle }}</h3>
+    <p><strong>Start:</strong> {{ minutesDetails.startTime | date: 'short' }}</p>
+    <p><strong>Room:</strong> {{ minutesDetails.roomName }}</p>
+
+    <hr />
+
+    <h4>Discussion Points</h4>
+    <p>{{ minutesDetails.discussionPoints }}</p>
+
+    <h4>Decisions</h4>
+    <p>{{ minutesDetails.decisions }}</p>
+
+    <hr />
+
+    <h4>Action Items</h4>
+    <table class="table table-sm">
+      <thead>
+        <tr>
+          <th>Description</th>
+          <th>Assigned To</th>
+          <th>Due Date</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ai of minutesDetails.actionItems">
+          <td>{{ ai.description }}</td>
+          <td>{{ ai.assignedUser }}</td>
+          <td>{{ ai.dueDate | date: 'shortDate' }}</td>
+          <td>{{ ai.status }}</td>
+          <td>
+            <button class="btn btn-sm btn-danger" (click)="deleteActionItem(ai.id)">
+              Delete
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h5 class="mt-4">Add Action Item</h5>
+    <div class="action-items-form">
+      <div class="row g-2">
+        <div class="col-md-4">
+          <input class="form-control" [(ngModel)]="newActionItem.description" placeholder="Description" />
+        </div>
+        <div class="col-md-3">
+          <input class="form-control" type="date" [(ngModel)]="newActionItem.dueDate" />
+        </div>
+        <div class="col-md-3">
+          <select class="form-select" [(ngModel)]="newActionItem.assignedTo">
+            <option *ngFor="let user of users" [value]="user.id">{{ user.name }}</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <select class="form-select" [(ngModel)]="newActionItem.status">
+            <option>Pending</option>
+            <option>In Progress</option>
+            <option>Completed</option>
+          </select>
+        </div>
+      </div>
+      <button class="btn btn-primary mt-2" (click)="addActionItem()">Add</button>
+    </div>
+
+    <button class="btn btn-outline-secondary mt-2" (click)="downloadPDF()">
+      Download PDF
+    </button>
+  </div>
+
+  <ng-template #loadingTpl>
+    <p>Loading details...</p>
+  </ng-template>
+</div>

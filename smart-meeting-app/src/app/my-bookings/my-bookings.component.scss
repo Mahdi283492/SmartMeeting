@@ -1,46 +1,93 @@
 .my-bookings {
   font-family: 'Segoe UI', sans-serif;
   color: #1f2937;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 1rem;
+
+  h2 {
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 0;
+  }
 
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-
-  .booking-card {
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    padding: 1.2rem;
-    border-radius: 10px;
-    margin-bottom: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    transition: box-shadow 0.3s ease;
+    margin-bottom: 1.5rem;
   }
 
   .btn-back {
     background: #e2e8f0;
-    padding: 0.4rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 6px;
-    font-size: 0.95rem;
+    font-size: 1rem;
     font-weight: 500;
+    border: none;
     color: #1f2937;
     cursor: pointer;
-    border: none;
-    transition: background 0.2s ease;
+    transition: all 0.2s ease;
 
     &:hover {
       background: #cbd5e1;
     }
   }
 
+  .info-text {
+    font-size: 1rem;
+    color: #6b7280;
+    margin-bottom: 1rem;
+
+    &.empty {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 1.05rem;
+    }
+  }
+
+  .error-text {
+    color: #dc2626;
+    margin-bottom: 1rem;
+  }
+
+  .booking-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 1.2rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+      transform: translateY(-2px);
+    }
+  }
+
+  .booking-info p {
+    margin: 0.25rem 0;
+    font-size: 0.95rem;
+  }
+
+  .status-confirmed {
+    color: #16a34a;
+    font-weight: 600;
+  }
+
+  .status-pending {
+    color: #d97706;
+    font-weight: 600;
+  }
+
   .btn-cancel {
     background: #ef4444;
-    color: white;
+    color: #fff;
     border: none;
-    padding: 0.45rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 6px;
     cursor: pointer;
     font-weight: 500;
@@ -50,6 +97,7 @@
       background: #dc2626;
     }
   }
+
 
   .modal-backdrop {
     position: fixed;
@@ -62,29 +110,36 @@
   }
 
   .modal {
-    background: white;
+    background: #fff;
     padding: 2rem;
     border-radius: 10px;
     max-width: 90%;
-    width: 380px;
+    width: 400px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
     text-align: center;
-  }
 
-  .modal-actions {
-    margin-top: 1.5rem;
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
+    .modal-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      color: #1f2937;
+    }
+
+    .modal-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+    }
   }
 
   .btn-danger {
     background: #dc2626;
     color: white;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 6px;
     border: none;
     font-weight: 500;
+    transition: background 0.2s ease;
 
     &:hover {
       background: #b91c1c;
@@ -93,10 +148,11 @@
 
   .btn-secondary {
     background: #f3f4f6;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.2rem;
     border-radius: 6px;
     border: none;
     font-weight: 500;
+    transition: background 0.2s ease;
 
     &:hover {
       background: #e5e7eb;

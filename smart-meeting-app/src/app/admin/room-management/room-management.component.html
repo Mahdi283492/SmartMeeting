@@ -1,0 +1,43 @@
+<div class="room-mgmt">
+  <h2> Room Management</h2>
+
+  <div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+  <div class="alert alert-success" *ngIf="success">{{ success }}</div>
+    <button class="btn btn-outline-primary" (click)="goToDashboard()">
+      <i class="bi bi-arrow-left"></i> Back to Dashboard
+    </button>
+
+
+  <form (ngSubmit)="saveRoom()" class="form-inline mb-4">
+    <input [(ngModel)]="newRoom.name" name="name" placeholder="Name" required />
+    <input [(ngModel)]="newRoom.capacity" name="capacity" type="number" placeholder="Capacity" required />
+    <input [(ngModel)]="newRoom.location" name="location" placeholder="Location" required />
+    <input [(ngModel)]="newRoom.features" name="features" placeholder="Features" required />
+    <button type="submit">{{ editingRoomId === null ? 'Add Room' : 'Update Room' }}</button>
+    <button type="button" (click)="cancelEdit()" *ngIf="editingRoomId !== null">Cancel</button>
+  </form>
+
+  <table class="room-table">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Capacity</th>
+        <th>Location</th>
+        <th>Features</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let room of rooms">
+        <td>{{ room.name }}</td>
+        <td>{{ room.capacity }}</td>
+        <td>{{ room.location }}</td>
+        <td>{{ room.features }}</td>
+        <td>
+          <button (click)="editRoom(room)">Edit</button>
+          <button (click)="deleteRoom(room.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

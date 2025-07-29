@@ -29,19 +29,26 @@ export class MyBookingsComponent implements OnInit {
     }
   }
 
-  loadBookings(): void {
-    this.loading = true;
-    this.http.get<any[]>('/api/Bookings/my').subscribe({
-      next: data => {
-        this.bookings = data;
-        this.loading = false;
-      },
-      error: err => {
-        this.error = err.error?.message || 'Failed to load bookings';
-        this.loading = false;
-      }
-    });
-  }
+loadBookings(): void {
+  this.loading = true;
+  this.http.get<any[]>('/api/Bookings').subscribe({
+    next: data => {
+      this.bookings = data.map(b => ({
+        id: b.id ?? b.ID,
+        roomName: b.roomName ?? b.RoomName,
+        startTime: b.startTime ?? b.StartTime,
+        endTime: b.endTime ?? b.EndTime,
+        status: b.status ?? b.Status
+      }));
+      this.loading = false;
+    },
+    error: err => {
+      this.error = err.error?.message || 'Failed to load bookings';
+      this.loading = false;
+    }
+  });
+}
+
 
   showCancelModal(id: number): void {
     this.bookingToCancel = id;
@@ -57,7 +64,8 @@ export class MyBookingsComponent implements OnInit {
     const id = this.bookingToCancel;
     this.http.delete(`/api/Bookings/${id}`).subscribe({
       next: () => {
-        this.bookings = this.bookings.filter(b => b.id !== id);
+
+        this.loadBookings();
         this.bookingToCancel = null;
       },
       error: err => {

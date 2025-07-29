@@ -33,12 +33,6 @@ C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\scopedcss\bundle\SmartMeetingAPI
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets.build.endpoints.json
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets\msbuild.SmartMeetingAPI.Microsoft.AspNetCore.StaticWebAssets.props
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets\msbuild.SmartMeetingAPI.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets\msbuild.build.SmartMeetingAPI.props
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.SmartMeetingAPI.props
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.SmartMeetingAPI.props
-C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets.pack.json
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\SmartMee.1CA80170.Up2Date
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\SmartMeetingAPI.dll
 C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\refint\SmartMeetingAPI.dll
@@ -65,13 +59,11 @@ C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.ClientModel.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Drawing.Common.dll
-C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Formats.Asn1.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Security.Permissions.dll
-C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\System.Windows.Extensions.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\runtimes\unix\lib\net6.0\Microsoft.Data.SqlClient.dll
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\Microsoft.Data.SqlClient.dll
@@ -181,3 +173,8 @@ C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.app.j
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.json
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\tsconfig.spec.json
 C:\Users\ADMIN\SmartMeetingAPI\bin\Debug\net9.0\smart-meeting-app\proxy.conf.json
+C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\rpswa.dswa.cache.json
+C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\rjimswa.dswa.cache.json
+C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\rjsmrazor.dswa.cache.json
+C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\rjsmcshtml.dswa.cache.json
+C:\Users\ADMIN\SmartMeetingAPI\obj\Debug\net9.0\staticwebassets.build.json.cache

@@ -9,6 +9,7 @@ namespace SmartMeetingAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class BookingsController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -18,48 +19,76 @@ namespace SmartMeetingAPI.Controllers
             _context = context;
         }
 
-
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<Booking>>> GetAll()
+        private async Task<int?> GetCurrentUserId()
         {
-            return await _context.Bookings.ToListAsync();
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (int.TryParse(userIdStr, out int userId))
+                return userId;
+
+            // fallback: try email claim
+            var email = User.FindFirstValue(ClaimTypes.Email);
+            if (email != null)
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+                return user?.Id;
+            }
+
+            return null;
         }
 
+      [AllowAnonymous]
+[HttpGet]
+public async Task<ActionResult<IEnumerable<object>>> GetAll()
+{
+    var allBookings = await _context.Bookings
+        .Include(b => b.Room)
+        .OrderByDescending(b => b.StartTime)
+        .Select(b => new
+        {
+            b.ID,
+            RoomName = b.Room.Name,
+            b.StartTime,
+            b.EndTime,
+            b.Status
+        })
+        .ToListAsync();
+
+    return Ok(allBookings);
+}
 
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Booking>> GetById(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings.Include(b => b.Room).FirstOrDefaultAsync(b => b.ID == id);
             return booking is null ? NotFound() : booking;
         }
 
-
-        [Authorize]
         [HttpPost("book")]
         public async Task<ActionResult<Booking>> Create([FromBody] CreateBookingDto input)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdStr, out var userId))
-                return BadRequest("Invalid user ID from token");
+            var userId = await GetCurrentUserId();
+            if (userId == null)
+                return BadRequest("Unable to determine current user.");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
                 return BadRequest($"No Room with ID {input.RoomID}.");
+
             bool hasConflict = await _context.Bookings.AnyAsync(b =>
-b.RoomID == input.RoomID &&
-b.StartTime < input.EndTime &&
-b.EndTime > input.StartTime);
+                b.RoomID == input.RoomID &&
+                b.StartTime < input.EndTime &&
+                b.EndTime > input.StartTime);
 
             if (hasConflict)
-                return BadRequest(new { message = "This room is already booked during the selected time." });
-
+                return Conflict(new { message = "This room is already booked during the selected time." });
 
             var booking = new Booking
             {
-                UserID = userId,
+                UserID = userId.Value,
                 RoomID = input.RoomID,
                 StartTime = input.StartTime,
                 EndTime = input.EndTime,
@@ -72,22 +101,18 @@ b.EndTime > input.StartTime);
             return CreatedAtAction(nameof(GetById), new { id = booking.ID }, booking);
         }
 
-
-
-        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Update(int id, [FromBody] CreateBookingDto input)
         {
-            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (!int.TryParse(userIdStr, out var userId))
-                return BadRequest("Invalid user ID from token");
+            var userId = await GetCurrentUserId();
+            if (userId == null)
+                return BadRequest("Unable to determine current user.");
 
             var booking = await _context.Bookings.FindAsync(id);
             if (booking is null)
                 return NotFound();
 
-
-            if (booking.UserID != userId)
+            if (booking.UserID != userId.Value)
                 return Forbid("You can only update your own bookings.");
 
             if (!await _context.Rooms.AnyAsync(r => r.ID == input.RoomID))
@@ -101,56 +126,30 @@ b.EndTime > input.StartTime);
             await _context.SaveChangesAsync();
             return NoContent();
         }
-        [Authorize]
-          [HttpGet("my")]
-          public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
-          {
-              var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier);
-              if (!int.TryParse(userIdStr, out var userId))
-                  return BadRequest("Invalid user ID from token");
 
-              var myBookings = await _context.Bookings
-                  .Where(b => b.UserID == userId)
-                  .Include(b => b.Room)
-                  .OrderByDescending(b => b.StartTime)
-                  .Select(b => new
-                  {
-                      b.ID,
-                      RoomName = b.Room.Name,
-                      b.StartTime,
-                      b.EndTime,
-                      b.Status
-                  })
-                  .ToListAsync();
-
-              return Ok(myBookings);
-          }
-  
-  /*          [HttpGet("my")]
-public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
-{
-    // TEMP: Use hardcoded user ID 1 to test rendering
-    int userId = 2;
-
-    var myBookings = await _context.Bookings
-        .Where(b => b.UserID == userId)
-        .Include(b => b.Room)
-        .OrderByDescending(b => b.StartTime)
-        .Select(b => new
+        [HttpGet("my")]
+        public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
         {
-            b.ID,
-            // RoomName = b.Room != null ? b.Room.Name : "Unknown",
-           
-            b.StartTime,
-            b.EndTime,
-            b.Status
-        })
-        .ToListAsync();
+            var userId = await GetCurrentUserId();
+            if (userId == null)
+                return BadRequest("Unable to determine current user.");
 
-    return Ok(myBookings);
-}*/
+            var myBookings = await _context.Bookings
+                .Where(b => b.UserID == userId.Value)
+                .Include(b => b.Room)
+                .OrderByDescending(b => b.StartTime)
+                .Select(b => new
+                {
+                    b.ID,
+                    RoomName = b.Room.Name,
+                    b.StartTime,
+                    b.EndTime,
+                    b.Status
+                })
+                .ToListAsync();
 
-
+            return Ok(myBookings);
+        }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
@@ -164,5 +163,4 @@ public async Task<ActionResult<IEnumerable<object>>> GetMyBookings()
             return NoContent();
         }
     }
-
 }

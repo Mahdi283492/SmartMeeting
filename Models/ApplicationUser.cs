@@ -6,7 +6,7 @@ namespace SmartMeetingAPI.Models
     public class ApplicationUser : IdentityUser<int>
     {
         public required string Name { get; set; }
-        
+        //public required string Role { get; set; }
 
         [JsonIgnore]
         public ICollection<Booking> Bookings { get; set; } = new List<Booking>();
